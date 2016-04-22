@@ -20,12 +20,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class FileController {
 	
-	private servletContext sContext; 
+	private MyServletContext myServletContext; 
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/upload")
 	public String provideUploadInfo(Model model) {
 		
-		File rootFolder = new File(sContext.getabsoluteDiskPath());
+		File rootFolder = myServletContext.getabsoluteDiskPath();
 		List<String> fileNames = Arrays.stream(rootFolder.listFiles())
 			.map(f -> f.getName())
 			.collect(Collectors.toList());
@@ -44,6 +44,7 @@ public class FileController {
 	public String handleFileUpload(@RequestParam("name") String name,
 								   @RequestParam("file") MultipartFile file,
 								   RedirectAttributes redirectAttributes) {
+									   
 		if (name.contains("/")) {
 			redirectAttributes.addFlashAttribute("message", 
 										"Folder separators or Relative pathnames not allowed");
@@ -51,12 +52,11 @@ public class FileController {
 		}
 		
 		if (!file.isEmpty()) {
-			try {
-				//Store the uploaded file content in filesystem 
-				File filepath = new File(sContext.getabsoluteDiskPath()+ "/" + name); 
-				file.transferTo(filepath);
+			try { 
+				File fileinPath = myServletContext.getFileinDiskPath(name); 
+				file.transferTo(fileinPath);
 				redirectAttributes.addFlashAttribute("message",
-						"You successfully uploaded " + name + "to the file system!"+"--path:"+filepath.getPath());
+						"You successfully uploaded " + name + "to the file system!"+"--path:"+fileinPath.getPath());
 			}
 			catch (Exception e) {
 				redirectAttributes.addFlashAttribute("message",
@@ -77,6 +77,7 @@ public class FileController {
 	public String handleFileDownload(@RequestParam("name") String name,
 								   @RequestParam("rename") String rename,
 								   RedirectAttributes redirectAttributes) {
+									   
 		if ((name.contains("/")) || (rename.contains("/"))) {
 			redirectAttributes.addFlashAttribute("message", 
 										"Folder separators or Relative pathnames not allowed");
@@ -85,13 +86,19 @@ public class FileController {
 		
 		if (!name.isEmpty()) {
 			try {
-				File filepath = new File(sContext.getabsoluteDiskPath());
+				File filepath = myServletContext.getabsoluteDiskPath();
+				//check if the file is in the disk
 				if(findFile(name,filepath)){
 					String newname = name; 
-					if (!rename.isEmpty()){ newname = rename;}
-					else { newname = name +"-Copy";}
-					FileCopyUtils.copy(new File(sContext.getabsoluteDiskPath() + "/" + name),
-									   new File(sContext.getabsoluteDiskPath() + "/" + newname));
+					if (!rename.isEmpty()){ 
+						newname = rename;
+					}
+					else {
+						//duplicated name
+						newname = name +"-Copy";
+					} 
+					FileCopyUtils.copy(myServletContext.getFileinDiskPath(name),
+									   myServletContext.getFileinDiskPath(newname);
 					redirectAttributes.addFlashAttribute("message",
 						"You successfully downloaded " + name + " to the file system!"+"--path:"+filepath.getPath());
 				}

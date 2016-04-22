@@ -3,9 +3,17 @@ package hello;
 import java.util.*;
 import java.io.File;
 
+/*
+	Return true if named file is in the give path(disk path particularly);
+	otherwise return false.
+*/
 public boolean findFile(String name,File file) {
+	
 	File[] list = file.listFiles();
-	if (!name.isEmpty() && !file.isEmpty()){
+	
+	if (name.isEmpty() || file.isEmpty()){
+		throw new IllegalArgumentException("Illegal File and name, Stop!");
+	} else {
 		if(list!=null) {
 			for (File fil : list) {
 				if (fil.isDirectory()){
@@ -16,7 +24,5 @@ public boolean findFile(String name,File file) {
 			}
 		}
 		return false;
-	} else {
-		System.out.println("FILE NOT ILLEGAL, STOP!");
 	}
 }

@@ -16,10 +16,21 @@
 	</div>
 
 	<div>
+		<form method="POST" enctype="multipart/form-data" action="/download">
+		<table>
+				<tr><td>Type file's name to download:</td><td><input type="text" name="name" /></td></tr>
+				<tr><td>Rename to:</td><td><input type="text" name="rename" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Download" /></td></tr>
+			</table>
+		</form>
+	</div>
+	
+	<div>
+		<tr><td>File system list:</td></tr>
 		<ul>
 			<li th:each="file : ${files}" th:text="${file}"></li>
 		</ul>
 	</div>
-
+	
 </body>
 </html>

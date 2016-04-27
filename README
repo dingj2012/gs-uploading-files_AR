@@ -1,0 +1,34 @@
+Ding Jin
+4/20/2016
+
+----------------------------------------------------------
+
+This is the file upload application example using Spring MVC:
+The source repository can be found on: 
+	https://github.com/spring-guides/gs-uploading-files.git
+The example guide can be found on: 
+	http://spring.io/guides/gs/uploading-files/
+
+----------------------------------------------------------
+
+The 'original' directory contains the original completed version.
+It stored uploaded file content in memory on the server.
+
+Copyright reserved to GoPivotal(http://creativecommons.org/licenses/by-nd/3.0/)
+
+----------------------------------------------------------
+
+The 'modified' directory contains the modified version, it
+	-Store the uploaded file in file system;
+	-Download file from file system;
+
+To run the application(if you are using Gradle), please:
+	$./gradlew bootRun
+
+or build the a JAR first, then run it:
+	$./gradlew build
+	$java -jar build/libs/gs-uploading-files-0.1.0.jar
+
+
+With the server running, you need to open a browser and visit 
+'http://localhost:8080/upload' to see the upload form.	

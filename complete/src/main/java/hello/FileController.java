@@ -3,6 +3,7 @@ package hello;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -88,7 +89,7 @@ public class FileController {
 			try {
 				File filepath = myServletContext.getabsoluteDiskPath();
 				//check if the file is in the disk
-				if(findFile(name,filepath)){
+				if(myServletContext.findFile(name)){
 					String newname = name; 
 					if (!rename.isEmpty()){ 
 						newname = rename;
@@ -98,7 +99,7 @@ public class FileController {
 						newname = name +"-Copy";
 					} 
 					FileCopyUtils.copy(myServletContext.getFileinDiskPath(name),
-									   myServletContext.getFileinDiskPath(newname);
+									   myServletContext.getFileinDiskPath(newname));
 					redirectAttributes.addFlashAttribute("message",
 						"You successfully downloaded " + name + " to the file system!"+"--path:"+filepath.getPath());
 				}
@@ -121,4 +122,9 @@ public class FileController {
 		
 		return "redirect:upload";
 	}
+	
+	
+	
+	
+	
 }

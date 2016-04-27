@@ -1,6 +1,8 @@
 package hello;
 
+import java.io.File;
 import java.util.*;
+
 
 import javax.servlet.ServletContext;
 
@@ -22,11 +24,33 @@ public class MyServletContext {
 	}
 	
 	public File getabsoluteDiskPath(){
-		return(new file(myServletContext.getRealPath("/"));
+		return(new File(myServletContext.getRealPath("/")));
 	}
 	
 	public File getFileinDiskPath(String filename){
-		return(new file(myServletContext.getRealPath("/")+ "/" + filename);
+		return(new File(myServletContext.getRealPath("/")+ "/" + filename));
+	}
+	
+	/*
+		Helper method, check if a named file(String) is in specific directory
+	*/
+	public boolean findFile(String name) {
+		File[] list = absoluteDiskPath.listFiles();
+	
+		if (name.isEmpty()){
+			throw new IllegalArgumentException("Illegal name, Stop!");
+		} else {
+			if(list!=null) {
+				for (File fil : list) {
+					if (fil.isDirectory()){
+						findFile(name);
+					} else if (name.equalsIgnoreCase(fil.getName())){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 	
 }
